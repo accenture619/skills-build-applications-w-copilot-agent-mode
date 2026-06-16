@@ -1,26 +1,23 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/octofit-tracker';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/octofit_db';
 
-export const connectDB = async () => {
+export async function connectDatabase() {
   try {
-    await mongoose.connect(MONGODB_URI, {
-      retryWrites: true,
-      w: 'majority'
-    });
-    console.log('✅ MongoDB connected successfully');
-    return true;
+    await mongoose.connect(MONGODB_URI);
+    console.log('Successfully connected to MongoDB');
   } catch (error) {
-    console.error('❌ MongoDB connection error:', error);
-    return false;
+    console.error('Failed to connect to MongoDB:', error);
+    process.exit(1);
   }
-};
+}
 
-export const disconnectDB = async () => {
+export async function disconnectDatabase() {
   try {
     await mongoose.disconnect();
-    console.log('✅ MongoDB disconnected');
+    console.log('Successfully disconnected from MongoDB');
   } catch (error) {
-    console.error('❌ MongoDB disconnection error:', error);
+    console.error('Failed to disconnect from MongoDB:', error);
+    process.exit(1);
   }
-};
+}
